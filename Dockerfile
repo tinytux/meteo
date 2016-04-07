@@ -8,7 +8,7 @@ ENV HOME /root
 
 RUN apt-get update
 
-RUN apt-get install -y openssh-server wget sudo apt-utils perl-modules cron
+RUN apt-get install -y openssh-server wget sudo apt-utils perl-modules netcat cron
 
 RUN sed --regexp-extended --in-place \
     's/^session\s+required\s+pam_loginuid.so$/session optional pam_loginuid.so/' \

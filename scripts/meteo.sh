@@ -1,7 +1,23 @@
 #!/bin/bash
 echo "Meteo Script"
 
-LOCATION="3000"
+CONFIG="/vagrant/config/server.inc"
+if [[ ! -e ${CONFIG} ]]; then
+    CONFIG="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )/../config/server.inc"
+    if [[ ! -e ${CONFIG} ]]; then
+        echo "Can not find config file: ${CONFIG}"
+    fi
+fi
+source ${CONFIG}
+
+if [[ -z ${ZIP_CODE} ]]; then
+    echo "ZIP_CODE not defined. Check the configuration file:"
+    echo "  ${CONFIG}"
+    exit 1
+fi
+
+LOCATION="${ZIP_CODE}"
+OUTPUT_FILE="meteo-${LOCATION}.png"
 
 # 1440 x 2560 pixels => 720x...
 echo "Downloading meteo image..."
@@ -42,14 +58,20 @@ montage day_1_mini.png day_2_mini.png day_3_mini.png day_4_mini.png -mode Concat
 
 convert today.png day_1_2_3_4_mini.png +append -background white -alpha remove week.png
 
-convert week.png -font Liberation-Sans -pointsize 28 -fill white -annotate +15+35 "$(date +"%H:%M")" -gravity West -crop +0+8 -gravity East -crop +6 meteo.png
+convert week.png -font Liberation-Sans -pointsize 28 -fill white -annotate +15+35 "$(date +"%H:%M")" -gravity West -crop +0+8 -gravity East -crop +6 ${OUTPUT_FILE}
 
 rm day*.png today.png week.png
 
-if [[ ! -e meteo.png ]]; then
-    echo "File meteo.png not found, can not upload!"
+if [[ ! -e ${OUTPUT_FILE} ]]; then
+    echo "File ${OUTPUT_FILE} not found, can not upload!"
 else
-    echo "Uploading..."
-    #TODO: upload
+    if [[ -z ${SCP_HOST} ]]; then
+        echo "SCP_HOST not defined, can not upload. Check the configuration file:"
+        echo "  ${CONFIG}"
+        exit 1
+    else
+        echo "Uploading ${OUTPUT_FILE} to ${SCP_USER}@${SCP_HOST}:${SCP_PATH}..."
+        scp ${OUTPUT_FILE} ${SCP_USER}@${SCP_HOST}:${SCP_PATH}
+    fi
 fi
 

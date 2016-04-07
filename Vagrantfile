@@ -4,8 +4,6 @@
 Vagrant.configure(2) do |config|
 
   ENV['VAGRANT_DEFAULT_PROVIDER'] = 'docker'
-  # Every Vagrant virtual environment requires a box to build off of.
-  # config.vm.box = "base"
 
   config.vm.provider "docker" do |node|
     node.name = "meteo"

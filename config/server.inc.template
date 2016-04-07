@@ -1,0 +1,7 @@
+# Customize this file and save it as "server.inc" to upload the .png file
+# to a custom server.
+ZIP_CODE="3000"
+SCP_HOST="localhost"
+SCP_USER="vagrant"
+SCP_PATH="/vagrant"
+

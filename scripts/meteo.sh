@@ -30,11 +30,17 @@ else
 fi
 
 function day_mini() {
-    convert day_${1}.png +repage -crop 139x139+5+23 -resize x65  day_${1}_icon_mini_tmp.png   # 65x65
+    convert day_${1}.png +repage -crop 139x139+6+22 -resize x65  day_${1}_icon_mini_tmp.png   # 65x65
     montage day_${1}_icon_mini_tmp.png -geometry 65x65+12+0      day_${1}_icon_mini.png       # 65x65
-    convert day_${1}.png +repage -crop 25x23+0+0                 day_${1}_title.png           # 25x23
-    convert day_${1}.png +repage -crop 30x23+0+162               day_${1}_min.png             # 30x23
-    convert day_${1}.png +repage -crop 32x23+116+162             day_${1}_max.png             # 32x23
+    convert day_${1}.png +repage -crop 25x18+50+1                day_${1}_title_today.png     # 25x18
+    convert day_${1}.png +repage -crop 25x18+0+1                 day_${1}_title.png           # 25x18
+    convert day_${1}.png +repage -crop 30x22+0+164               day_${1}_min.png             # 30x23
+    convert day_${1}.png +repage -crop 32x22+116+164             day_${1}_max.png             # 32x23
+
+    if [[ ${1} == 1 ]]; then
+        # No title for 'today'
+        cp day_${1}_title_today.png day_${1}_title.png
+    fi
 
     convert day_${1}_title.png day_${1}_min.png day_${1}_max.png +append day_${1}_min_max.png              # 87x23
 
@@ -42,16 +48,22 @@ function day_mini() {
     rm -f day_${1}_icon_mini.png day_${1}_title.png day_${1}_min.png day_${1}_max.png day_${1}_min_max.png
 }
 
-convert days.png  +repage -crop 150x200+16+700  day_1.png 
+DAY_HEIGHT=180
+DAY_WIDTH=150
+DAYS_Y_OFFSET=738
+DAYS_X_OFFSET=12
+DAYS_SPACE=6
+
+convert days.png  +repage -crop ${DAY_WIDTH}x${DAY_HEIGHT}+$(awk "BEGIN {print ($DAYS_X_OFFSET + 0 * ($DAY_WIDTH + $DAYS_SPACE)); exit}")+${DAYS_Y_OFFSET} day_1.png
 day_mini 1
 
-convert days.png  +repage -crop 150x200+170+700  day_2.png
+convert days.png  +repage -crop ${DAY_WIDTH}x${DAY_HEIGHT}+$(awk "BEGIN {print ($DAYS_X_OFFSET + 1 * ($DAY_WIDTH + $DAYS_SPACE)); exit}")+${DAYS_Y_OFFSET} day_2.png
 day_mini 2
 
-convert days.png  +repage -crop 150x200+324+700  day_3.png 
+convert days.png  +repage -crop ${DAY_WIDTH}x${DAY_HEIGHT}+$(awk "BEGIN {print ($DAYS_X_OFFSET + 2 * ($DAY_WIDTH + $DAYS_SPACE)); exit}")+${DAYS_Y_OFFSET} day_3.png
 day_mini 3
 
-convert days.png  +repage -crop 150x200+478+700  day_4.png 
+convert days.png  +repage -crop ${DAY_WIDTH}x${DAY_HEIGHT}+$(awk "BEGIN {print ($DAYS_X_OFFSET + 3 * ($DAY_WIDTH + $DAYS_SPACE)); exit}")+${DAYS_Y_OFFSET} day_4.png
 day_mini 4
 
 montage day_1_mini.png day_2_mini.png day_3_mini.png day_4_mini.png -mode Concatenate -tile 2x4 day_1_2_3_4_mini.png # 174 x 216
@@ -61,6 +73,7 @@ convert today.png day_1_2_3_4_mini.png +append -background white -alpha remove w
 convert week.png -font Liberation-Sans -pointsize 28 -fill white -annotate +15+35 "$(date +"%H:%M")" -gravity West -crop +0+8 -gravity East -crop +6 ${OUTPUT_FILE}
 
 rm day*.png today.png week.png
+#cp *.png /vagrant/
 
 if [[ ! -e ${OUTPUT_FILE} ]]; then
     echo "File ${OUTPUT_FILE} not found, can not upload!"

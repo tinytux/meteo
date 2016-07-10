@@ -32,15 +32,9 @@ fi
 function day_mini() {
     convert day_${1}.png +repage -crop 139x139+6+22 -resize x65  day_${1}_icon_mini_tmp.png   # 65x65
     montage day_${1}_icon_mini_tmp.png -geometry 65x65+12+0      day_${1}_icon_mini.png       # 65x65
-    convert day_${1}.png +repage -crop 25x18+50+1                day_${1}_title_today.png     # 25x18
     convert day_${1}.png +repage -crop 25x18+0+1                 day_${1}_title.png           # 25x18
     convert day_${1}.png +repage -crop 30x22+0+164               day_${1}_min.png             # 30x23
     convert day_${1}.png +repage -crop 32x22+116+164             day_${1}_max.png             # 32x23
-
-    if [[ ${1} == 1 ]]; then
-        # No title for 'today'
-        cp day_${1}_title_today.png day_${1}_title.png
-    fi
 
     convert day_${1}_title.png day_${1}_min.png day_${1}_max.png +append day_${1}_min_max.png              # 87x23
 
@@ -54,16 +48,16 @@ DAYS_Y_OFFSET=738
 DAYS_X_OFFSET=12
 DAYS_SPACE=6
 
-convert days.png  +repage -crop ${DAY_WIDTH}x${DAY_HEIGHT}+$(awk "BEGIN {print ($DAYS_X_OFFSET + 0 * ($DAY_WIDTH + $DAYS_SPACE)); exit}")+${DAYS_Y_OFFSET} day_1.png
+convert days.png  +repage -crop ${DAY_WIDTH}x${DAY_HEIGHT}+$(awk "BEGIN {print ($DAYS_X_OFFSET + 1 * ($DAY_WIDTH + $DAYS_SPACE)); exit}")+${DAYS_Y_OFFSET} day_1.png
 day_mini 1
 
-convert days.png  +repage -crop ${DAY_WIDTH}x${DAY_HEIGHT}+$(awk "BEGIN {print ($DAYS_X_OFFSET + 1 * ($DAY_WIDTH + $DAYS_SPACE)); exit}")+${DAYS_Y_OFFSET} day_2.png
+convert days.png  +repage -crop ${DAY_WIDTH}x${DAY_HEIGHT}+$(awk "BEGIN {print ($DAYS_X_OFFSET + 2 * ($DAY_WIDTH + $DAYS_SPACE)); exit}")+${DAYS_Y_OFFSET} day_2.png
 day_mini 2
 
-convert days.png  +repage -crop ${DAY_WIDTH}x${DAY_HEIGHT}+$(awk "BEGIN {print ($DAYS_X_OFFSET + 2 * ($DAY_WIDTH + $DAYS_SPACE)); exit}")+${DAYS_Y_OFFSET} day_3.png
+convert days.png  +repage -crop ${DAY_WIDTH}x${DAY_HEIGHT}+$(awk "BEGIN {print ($DAYS_X_OFFSET + 3 * ($DAY_WIDTH + $DAYS_SPACE)); exit}")+${DAYS_Y_OFFSET} day_3.png
 day_mini 3
 
-convert days.png  +repage -crop ${DAY_WIDTH}x${DAY_HEIGHT}+$(awk "BEGIN {print ($DAYS_X_OFFSET + 3 * ($DAY_WIDTH + $DAYS_SPACE)); exit}")+${DAYS_Y_OFFSET} day_4.png
+convert days.png  +repage -crop ${DAY_WIDTH}x${DAY_HEIGHT}+$(awk "BEGIN {print ($DAYS_X_OFFSET + 4 * ($DAY_WIDTH + $DAYS_SPACE)); exit}")+${DAYS_Y_OFFSET} day_4.png
 day_mini 4
 
 montage day_1_mini.png day_2_mini.png day_3_mini.png day_4_mini.png -mode Concatenate -tile 2x4 day_1_2_3_4_mini.png # 174 x 216

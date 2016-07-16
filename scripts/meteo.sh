@@ -32,9 +32,9 @@ fi
 function day_mini() {
     convert day_${1}.png +repage -crop 139x139+6+22 -resize x65  day_${1}_icon_mini_tmp.png   # 65x65
     montage day_${1}_icon_mini_tmp.png -geometry 65x65+12+0      day_${1}_icon_mini.png       # 65x65
-    convert day_${1}.png +repage -crop 25x18+0+1                 day_${1}_title.png           # 25x18
-    convert day_${1}.png +repage -crop 30x22+0+164               day_${1}_min.png             # 30x23
-    convert day_${1}.png +repage -crop 32x22+116+164             day_${1}_max.png             # 32x23
+    convert day_${1}.png +repage -crop 25x18+0+2                 day_${1}_title.png           # 25x18
+    convert day_${1}.png +repage -crop 30x22+0+168               day_${1}_min.png             # 30x23
+    convert day_${1}.png +repage -crop 32x22+116+168             day_${1}_max.png             # 32x23
 
     convert day_${1}_title.png day_${1}_min.png day_${1}_max.png +append day_${1}_min_max.png              # 87x23
 
@@ -42,9 +42,9 @@ function day_mini() {
     rm -f day_${1}_icon_mini.png day_${1}_title.png day_${1}_min.png day_${1}_max.png day_${1}_min_max.png
 }
 
-DAY_HEIGHT=180
+DAY_HEIGHT=184
 DAY_WIDTH=150
-DAYS_Y_OFFSET=738
+DAYS_Y_OFFSET=693
 DAYS_X_OFFSET=12
 DAYS_SPACE=6
 

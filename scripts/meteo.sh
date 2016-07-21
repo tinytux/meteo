@@ -21,7 +21,7 @@ OUTPUT_FILE="meteo-${LOCATION}.png"
 
 # 1440 x 2560 pixels => 720x...
 echo "Downloading meteo image..."
-wget -q -O - "http://meteo.search.ch/images/chart/${LOCATION}.png?show=time&lang=de&width=380&height=180" >today.png
+wget -q --retry-connrefused --waitretry=1 --read-timeout=20 --timeout=15 -t 10 --no-dns-cache -O - "http://meteo.search.ch/images/chart/${LOCATION}.png?show=time&lang=de&width=380&height=180" >today.png
 
 if [[ "$(hostname)" == "apu" ]] || [[ -f /.dockerinit ]]; then
     xvfb-run --server-args="-screen 0, 1024x768x24" cutycapt --url=http://meteo.search.ch/nidau.de.html --user-agent='Mozilla/5.0 (Android; Mobile; rv:26.0) Gecko/26.0 Firefox/26.0' --out=days.png

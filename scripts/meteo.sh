@@ -28,6 +28,11 @@ if [[ ${RETCODE} -ne 0 ]]; then
     exit ${RETCODE}
 fi
 
+if [[ "$(pgrep -c cutycapt)" -gt 0 ]]; then 
+    echo "Hanging process detected. Killing..."
+    killall -9 cutycapt
+fi
+
 if [[ "$(hostname)" == "apu" ]] || [[ -f /.dockerinit ]]; then
     xvfb-run --server-args="-screen 0, 1024x768x24" cutycapt --url=http://meteo.search.ch/nidau.de.html --user-agent='Mozilla/5.0 (Android; Mobile; rv:26.0) Gecko/26.0 Firefox/26.0' --out=days.png
 else

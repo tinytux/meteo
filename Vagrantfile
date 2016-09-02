@@ -15,6 +15,7 @@ Vagrant.configure(2) do |config|
   # Run the provisioning script
   config.vm.provision :shell, path: "./scripts/setup.sh"
   config.vm.provision "shell", inline: <<-SHELL
+    sudo touch /.dockerinit;
     sudo /usr/sbin/cron &
 SHELL
 end
